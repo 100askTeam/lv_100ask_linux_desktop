@@ -1,0 +1,15 @@
+[submodule "lv_100ask_demos"]
+	path = lv_100ask_demos
+	url = https://github.com/100askTeam/lv_100ask_demos.git
+[submodule "lv_100ask_modules"]
+	path = lv_100ask_modules
+	url = https://github.com/100askTeam/lv_100ask_modules.git
+[submodule "lv_drivers"]
+	path = lv_drivers
+	url = https://github.com/lvgl/lv_drivers.git
+[submodule "lvgl"]
+	path = lvgl
+	url = https://github.com/lvgl/lvgl.git
+[submodule "lv_demos"]
+	path = lv_demos
+	url = https://github.com/lvgl/lv_demos.git

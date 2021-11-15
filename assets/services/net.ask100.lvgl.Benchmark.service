@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=net.ask100.lvgl.Benchmark
+Exec=/usr/share/100ask_desktop/general_Benchmark
