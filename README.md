@@ -2,7 +2,7 @@
 
 <h2 align="center">100ASK Linux LVGL Desktop</h2>
 
-100ASK Linux LVGL desktop 是一个 MIT 许可的开源项目。本项目主要目的是为大家提供一个嵌入式Linux GUI的参考解决方案：低内存占用、简洁美观的视觉效果、拓展性强的项目架构。
+100ASK Linux LVGL desktop 是一个 MIT 许可的开源项目。本项目主要目的是为大家提供一个嵌入式Linux GUI的参考解决方案：低内存占用、简洁美观的视觉效果、稳定且拓展性强的项目架构。
 
 # 介绍(Introduction)
 
@@ -30,7 +30,7 @@
     如果是学习韦东山嵌入式Linux教程的小伙伴可以跳过这一步，
     需要搭建开发环境的请点击连接查看详细教程：xxxxxx 。
 2. 配置交叉编译环境。如果工具链没有配置正确，可能会导致编译不通过，即使编译通过了也不能在目标平台上运行，请注意检查运行环境，编译环境。
-3. 先克隆主仓库：git clone https://github.com/100askTeam/lv_100ask_linux_desktop.git
+3. 先克隆主仓库：git clone xxxxxxxx
 4. 克隆主仓库后，同步子仓库模块： git submodule update --init --recursive
 5. 后续更新子仓库模块： git submodule update --remote
 6. 进入仓库根目录 `xxxxx` ，执行 `make clean && make` 开始编译。
@@ -68,8 +68,7 @@ Exec=~/general_About # 原来是这样的Exec=/usr/share/100ask_desktop/general_
 
 ## 项目框图
 
-TODO
-
+![项目框图](https://img-blog.csdnimg.cn/6f6a8fc86c094e779ab889243ca0dda9.png)
 
 ## 目录说明
 ``` shell
@@ -107,8 +106,6 @@ TODO
 └── obj # 桌面程序的编译过程输出文件存放在这里(执行后 make clean 会清除)，可执行文件放在项目根目录的 bin 目录下
 ```
 
-# 程序说明
-TODO
 ## 如何添加自己的程序
 
 参考 `lv_100ask_app/` 在原有基础上追加或创建自己的应用。
@@ -129,9 +126,9 @@ LVGL 视频教程： TODO
 欢迎来论坛发帖交流：[http://bbs.100ask.net/](http://bbs.100ask.net/)
 
 # Issues
-
+TODO
 # Changelog
-
+TODO
 
 # License
 MIT
