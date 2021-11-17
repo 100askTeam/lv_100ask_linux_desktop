@@ -68,7 +68,7 @@ Exec=~/general_About # 原来是这样的Exec=/usr/share/100ask_desktop/general_
 
 ## 项目框图
 
-![项目框图](https://img-blog.csdnimg.cn/6f6a8fc86c094e779ab889243ca0dda9.png)
+![项目框图](https://img-blog.csdnimg.cn/7a335dabd8ea4642bc7ba60f19d80fe8.jpg)
 
 ## 目录说明
 ``` shell
