@@ -30,14 +30,73 @@
     如果是学习韦东山嵌入式Linux教程的小伙伴可以跳过这一步，
     需要搭建开发环境的请点击连接查看详细教程：xxxxxx 。
 2. 配置交叉编译环境。如果工具链没有配置正确，可能会导致编译不通过，即使编译通过了也不能在目标平台上运行，请注意检查运行环境，编译环境。
-3. 先克隆主仓库：git clone xxxxxxxx
-4. 克隆主仓库后，同步子仓库模块： git submodule update --init --recursive
-5. 后续更新子仓库模块： git submodule update --remote
-6. 进入仓库根目录 `xxxxx` ，执行 `make clean && make` 开始编译。
-7. 提升编译速度。全速编译命令： `make clean && make -j$(nproc) RUN_JOBS=-j$(nproc)` 
+3. 项目用到了dbus库，但是由于工具链可能有问题(暂未解决)，导致我们需要手动指定dbus的头文件路径，因此我们需要在工具链中进行一些操作：
+
+```shell
+
+book@100ask:~/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include$ ls dbus-
+dbus-1.0/   dbus-c++-1/ 
+book@100ask:~/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include$ pwd
+/home/book/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include
+book@100ask:~/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include$ cp dbus-1.0/dbus/ -rfd .
+book@100ask:~/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include$ sync
+book@100ask:~/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include$ ls dbus
+dbus/       dbus-1.0/   dbus-c++-1/ 
+book@100ask:~/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include$ ls dbus
+
+```
+
+> 编译的时候如果报错： `fatal error: dbus/dbus.h No such file or directory` 应该回来看这里的操作，按照自己的sdk路径参考修改即可。
+
+4. 先克隆主仓库：git clone xxxxxxxx
+5. 克隆主仓库后，同步子仓库模块： git submodule update --init --recursive
+6. 后续更新子仓库模块： git submodule update --remote
+7. 进入仓库根目录 `xxxxx` ，执行 `make clean && make` 开始编译。
+8. 提升编译速度。全速编译命令： `make clean && make -j$(nproc) RUN_JOBS=-j$(nproc)` 
     "make -j$(nproc)" 的 **$(nproc)** 是指定编译 **主桌面程序** 的内核线程数，命令会自动获取系统支持最大的线程数，可以手动指定线程数，如： -j16 ，
     "RUN_JOBS=j$(nproc)"的 **$(nproc)** 是指定编译 **APP程序** 的内核线程数，命令会自动获取系统支持最大的线程数，可以手动指定线程数，如： -j16 ，
     Linux 下输入 `nproc` 命令返回的数字是你机器的线程数。
+
+#### 编译其他板子
+
+配置好交叉编译工具链之后，只需要稍作修改便可以在 100ASK_IMX6ULL_MINI、100ASK_STM32MP157 开发板上运行：
+1. 参考[上面](#编译项目)的第三步操作
+2. 修改 Makefile 变量 `CFLAGS` 的这两个链接路径，指定为你的路径：
+
+```shell
+
+-I ~/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include -I ~/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/dbus-1.0/include
+
+```
+
+---------------
+
+示例：比如使用 100ASK_IMX6ULL_MINI开发板，并且是按照韦东山教程配套的资料文档配置好了工具链之后这样操作：
+
+1. 复制 dbus 库：
+
+```shell
+
+book@100ask:~/100ask_imx6ull-mini-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include$ ls dbus-
+dbus-1.0/   dbus-c++-1/ 
+book@100ask:~/100ask_imx6ull-mini-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include$ pwd
+/home/book/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include
+book@100ask:~/100ask_imx6ull-mini-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include$ cp dbus-1.0/dbus/ -rfd .
+book@100ask:~/100ask_imx6ull-mini-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include$ sync
+book@100ask:~/100ask_imx6ull-mini-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include$ ls dbus
+dbus/       dbus-1.0/   dbus-c++-1/ 
+book@100ask:~/100ask_imx6ull-mini-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include$ ls dbus
+
+```
+
+2. 修改 Makefile 变量 `CFLAGS` 的这两个链接路径，指定为你的路径：
+
+```shell
+
+-I ~/100ask_imx6ull-mini-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include -I ~/100ask_imx6ull-mini-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/dbus-1.0/include
+
+```
+
 
 ### 如何运行
 1. 编译出来的可执行程序会放在项目根目录的 `bin` 目录下，将里面的可执行文件全部传到开发板文件系统中(如家目录)，
