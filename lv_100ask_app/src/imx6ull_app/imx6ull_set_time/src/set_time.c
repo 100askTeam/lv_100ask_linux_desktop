@@ -61,8 +61,7 @@ uint8_t Second= 2 ;
 
 
 ///////////////////////////// 日历
-static lv_obj_t * calendar;
-static lv_obj_t * calendar_header;
+static lv_obj_t * g_calendar;
 
 static void date_event_cb(lv_event_t * e);
 static void calendar_event_cb(lv_event_t * e);
@@ -186,7 +185,7 @@ static void date_event_cb(lv_event_t * e)
 
     if(code == LV_EVENT_FOCUSED) {
         if(lv_indev_get_type(lv_indev_get_act()) == LV_INDEV_TYPE_POINTER) {
-            if(calendar == NULL) {
+            if(g_calendar == NULL) {
                 // 获取系统时间
                 time_t rawtime;
                 struct tm *info;
@@ -194,17 +193,17 @@ static void date_event_cb(lv_event_t * e)
                 info = localtime( &rawtime );
 
                 lv_obj_add_flag(lv_layer_top(), LV_OBJ_FLAG_CLICKABLE);                             // 使能 lv_layer_top 点击
-                calendar = lv_calendar_create(lv_layer_top());                                      // 在 lv_layer_top 层上创建日历对象
+                g_calendar = lv_calendar_create(lv_layer_top());                                      // 在 lv_layer_top 层上创建日历对象
                 lv_obj_set_style_bg_opa(lv_layer_top(), LV_OPA_50, 0);                              // 设置对象透明度
                 lv_obj_set_style_bg_color(lv_layer_top(), lv_palette_main(LV_PALETTE_GREY), 0);     // 设置对象颜色
-                lv_obj_set_size(calendar, 300, 300);                                                // 设置对象大小
-                lv_calendar_set_today_date(calendar, (info->tm_year + 2000 - 100), (info->tm_mon + 1), info->tm_mday);   // 设置今天的日期
-                lv_calendar_set_showed_date(calendar, (info->tm_year + 2000 - 100), (info->tm_mon + 1));                 // 给日历的指定打开时显示的日期
-                lv_obj_align(calendar, LV_ALIGN_CENTER, 0, 30);                                     // 设置对象对齐、偏移
-                lv_obj_add_event_cb(calendar, calendar_event_cb, LV_EVENT_VALUE_CHANGED, ta);       // 给对象分配事件
+                lv_obj_set_size(g_calendar, 300, 300);                                                // 设置对象大小
+                lv_calendar_set_today_date(g_calendar, (info->tm_year + 2000 - 100), (info->tm_mon + 1), info->tm_mday);   // 设置今天的日期
+                lv_calendar_set_showed_date(g_calendar, (info->tm_year + 2000 - 100), (info->tm_mon + 1));                 // 给日历的指定打开时显示的日期
+                lv_obj_align(g_calendar, LV_ALIGN_CENTER, 0, 30);                                     // 设置对象对齐、偏移
+                lv_obj_add_event_cb(g_calendar, calendar_event_cb, LV_EVENT_VALUE_CHANGED, ta);       // 给对象分配事件
                 lv_obj_add_event_cb(lv_layer_top(), calendar_event_cb, LV_EVENT_CLICKED, ta);     // 给对象分配事件(lv_layer_top层分配点击回调处理函数)
 
-                calendar_header = lv_calendar_header_dropdown_create(calendar);     // 创建一个包含 2 个下拉列表的标题：一个用于年份，另一个用于月份。
+                lv_calendar_header_dropdown_create(g_calendar);     // 创建一个包含 2 个下拉列表的标题：一个用于年份，另一个用于月份。
             }
         }
     }
@@ -215,37 +214,35 @@ static void calendar_event_cb(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);    // 获取事件代码
     lv_obj_t * ta = lv_event_get_user_data(e);      // 获取在对象上注册事件时传递的 user_data
+    lv_obj_t * obj = lv_event_get_current_target(e);
 
     // 判断事件类型
     if(code == LV_EVENT_VALUE_CHANGED) {
         char buf[32];
         char cmd_buf[64];
         lv_calendar_date_t d;
-        lv_calendar_get_pressed_date(e->target, &d);        // 获取当前选中的日期
+        lv_calendar_get_pressed_date(obj, &d);        // 获取当前选中的日期
 
+        memset(buf, 0, sizeof(buf));
         lv_snprintf(buf, sizeof(buf), "%02d-%02d-%d", d.year, d.month, d.day);
         lv_textarea_set_text(ta, buf);  // 在文本区域展示日期信息
 
-        lv_obj_del(calendar);           // 删除对象及其所有子对象
-        lv_obj_del(calendar_header);    // 删除对象及其所有子对象
-        lv_obj_remove_event_cb(lv_layer_top(),calendar_event_cb);   // 删除对象的事件处理函数(lv_layer_top层)
-        calendar = NULL;
-        calendar_header = NULL;
-        lv_obj_clear_flag(lv_layer_top(), LV_OBJ_FLAG_CLICKABLE);   // 清除标志(lv_layer_top层)
-        lv_obj_set_style_bg_opa(lv_layer_top(), LV_OPA_TRANSP, 0);  // 设置透明度(lv_layer_top层)
-
         lv_snprintf(cmd_buf, sizeof(cmd_buf), "date -s %s && hwclock -w && hwclock -w", buf);
         printf("%s\n", cmd_buf);
-        system(cmd_buf);
+        system(cmd_buf);  // TODO
         update_time_value();
+
+        lv_obj_del(g_calendar);           // 删除对象及其所有子对象
+        lv_obj_remove_event_cb(lv_layer_top(), calendar_event_cb);   // 删除对象的事件处理函数(lv_layer_top层)
+        g_calendar = NULL;
+        lv_obj_clear_flag(lv_layer_top(), LV_OBJ_FLAG_CLICKABLE);   // 清除标志(lv_layer_top层)
+        lv_obj_set_style_bg_opa(lv_layer_top(), LV_OPA_TRANSP, 0);  // 设置透明度(lv_layer_top层)
     }
     else if ((code == LV_EVENT_CLICKED))
     {
-        lv_obj_del(calendar);           // 删除对象及其所有子对象
-        lv_obj_del(calendar_header);    // 删除对象及其所有子对象
-        lv_obj_remove_event_cb(lv_layer_top(),calendar_event_cb);   // 删除对象的事件处理函数(lv_layer_top层)
-        calendar = NULL;
-        calendar_header = NULL;
+        lv_obj_del(g_calendar);           // 删除对象及其所有子对象
+        lv_obj_remove_event_cb(lv_layer_top(), calendar_event_cb);   // 删除对象的事件处理函数(lv_layer_top层)
+        g_calendar = NULL;
         lv_obj_clear_flag(lv_layer_top(), LV_OBJ_FLAG_CLICKABLE);   // 清除标志(lv_layer_top层)
         lv_obj_set_style_bg_opa(lv_layer_top(), LV_OPA_TRANSP, 0);  // 设置透明度(lv_layer_top层)
     }
@@ -323,7 +320,7 @@ static void opt_hour_event_cb(lv_event_t * e)
 
     if(code == LV_EVENT_FOCUSED) {
         if(lv_indev_get_type(lv_indev_get_act()) == LV_INDEV_TYPE_POINTER) {
-            if(calendar == NULL) {
+            if(g_calendar == NULL) {
                 const char * opts = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24";
                 uint16_t selected = atoi(lv_label_get_text(lv_obj_get_child(ta, 0))) - 1; // 获取当前时间，并设为默认选中项
 
@@ -333,7 +330,7 @@ static void opt_hour_event_cb(lv_event_t * e)
 
                 lv_obj_t *roller= lv_roller_create(lv_layer_top());
                 lv_roller_set_options(roller, opts, LV_ROLLER_MODE_NORMAL); // 设置选中的选项 TODO
-                lv_roller_set_visible_row_count(roller, 3);
+                lv_roller_set_visible_row_count(roller, 8);
                 lv_obj_set_width(roller, 80);
                 lv_obj_set_style_text_font(roller, &lv_font_montserrat_22, 0);
                 lv_obj_align_to(roller, ta, LV_ALIGN_CENTER, 0, 0);
@@ -392,7 +389,7 @@ static void opt_minute_event_cb(lv_event_t * e)
 
     if(code == LV_EVENT_FOCUSED) {
         if(lv_indev_get_type(lv_indev_get_act()) == LV_INDEV_TYPE_POINTER) {
-            if(calendar == NULL) {
+            if(g_calendar == NULL) {
                 const char * opts = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n\
                                      21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n\
                                      41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59";
@@ -404,7 +401,7 @@ static void opt_minute_event_cb(lv_event_t * e)
 
                 lv_obj_t *roller= lv_roller_create(lv_layer_top());
                 lv_roller_set_options(roller, opts, LV_ROLLER_MODE_NORMAL); // 设置选中的选项 TODO
-                lv_roller_set_visible_row_count(roller, 3);
+                lv_roller_set_visible_row_count(roller, 8);
                 lv_obj_set_width(roller, 80);
                 lv_obj_set_style_text_font(roller, &lv_font_montserrat_22, 0);
                 lv_obj_align_to(roller, ta, LV_ALIGN_CENTER, 0, 0);
