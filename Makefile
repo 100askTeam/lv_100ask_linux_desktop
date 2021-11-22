@@ -37,6 +37,7 @@ SRCS = $(ASRCS) $(CSRCS) $(MAINSRC)
 OBJS = $(AOBJS) $(COBJS)
 
 ## MAINOBJ -> OBJFILES
+# general app
 SRC_DIR  +=  lv_100ask_app/src/general_app/general_file_manager\
 			 lv_100ask_app/src/general_app/general_2048_game\
 			 lv_100ask_app/src/general_app/general_game_memory\
@@ -46,11 +47,13 @@ SRC_DIR  +=  lv_100ask_app/src/general_app/general_file_manager\
 			 lv_100ask_app/src/general_app/general_widgets\
 			 lv_100ask_app/src/general_app/general_benchmark\
 			 lv_100ask_app/src/general_app/general_music_player\
-			 lv_100ask_app/src/general_app/general_about\
-			 lv_100ask_app/src/imx6ull_app/imx6ull_set_lcd_brightness\
+			 lv_100ask_app/src/general_app/general_about
+# imx6ull app
+SRC_DIR  +=  lv_100ask_app/src/imx6ull_app/imx6ull_set_lcd_brightness\
 			 lv_100ask_app/src/imx6ull_app/imx6ull_set_time\
 			 lv_100ask_app/src/imx6ull_app/imx6ull_set_wlan\
 			 lv_100ask_app/src/imx6ull_app/imx6ull_set_lan
+
 
 all: default
 	$(foreach  dir,$(SRC_DIR),make $(RUN_JOBS) -C $(dir);)
