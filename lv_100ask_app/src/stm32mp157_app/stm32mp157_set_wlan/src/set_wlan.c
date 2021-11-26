@@ -3,12 +3,12 @@
  * @file    set_wlan.c
  * @author  百问科技
  * @version V1.0
- * @date    2021-10-29
- * @brief	IMX6ULL屏幕背光设置
+ * @date    2021-11-25
+ * @brief	wifi设置
  ******************************************************************************
  * Change Logs:
  * Date           Author          Notes
- * 2021-10-29     zhouyuebiao     First version
+ * 2021-11-25     zhouyuebiao     First version
  ******************************************************************************
  * @attention
  *
@@ -561,7 +561,7 @@ static void wifi_list_event_handler(lv_event_t * e)
 }
 
 
-void imx6ull_set_wlan_init(void)
+void set_wlan_init(void)
 {
     lv_obj_t * obj_layout;
     lv_obj_t * ctr_btn_layout;

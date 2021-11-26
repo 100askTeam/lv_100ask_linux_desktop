@@ -3,12 +3,12 @@
  * @file    set_lcd_brightness.c
  * @author  百问科技
  * @version V1.0
- * @date    2021-10-29
+ * @date    2021-11-25
  * @brief	IMX6ULL屏幕背光设置
  ******************************************************************************
  * Change Logs:
  * Date           Author          Notes
- * 2021-10-29     zhouyuebiao     First version
+ * 2021-11-25     zhouyuebiao     First version
  ******************************************************************************
  * @attention
  *
@@ -45,7 +45,7 @@
 static void backlight_control(int32_t brightness)
 {
         char ch_led_state[2];
-        char * led_brightness = "/sys/class/backlight/backlight/brightness";;
+        char * led_brightness = "/sys/class/backlight/panel-backlight/brightness";;
         FILE *p_led_control = NULL;
 
         if ((p_led_control = fopen(led_brightness, "r+")) != NULL)
@@ -65,7 +65,7 @@ static void backlight_control(int32_t brightness)
 static char get_backlight_brightenss(void)
 {
         char ch_led_state[2];
-        char * led_brightness = "/sys/class/backlight/backlight/brightness";;
+        char * led_brightness = "/sys/class/backlight/panel-backlight/brightness";;
         FILE *p_led_control = NULL;
 
         if ((p_led_control = fopen(led_brightness, "r+")) != NULL)
@@ -146,7 +146,7 @@ static void slider_event_cb(lv_event_t * e)
 }
 
 
-void imx6ull_set_lcd_brightness_init(void)
+void set_lcd_brightness_init(void)
 {
     /*Create a transition*/
     static const lv_style_prop_t props[] = {LV_STYLE_BG_COLOR, 0};
@@ -186,7 +186,7 @@ void imx6ull_set_lcd_brightness_init(void)
     lv_obj_remove_style_all(slider);        /*Remove the styles coming from the theme*/
     //lv_obj_set_size(slider, (LV_HOR_RES / 4 * 3), (LV_VER_RES / 20));
     lv_obj_set_width(slider, LV_PCT(60));  // lv_pct(x) can be used to set the size and position in percentage
-    lv_bar_set_range(slider, 0, 8);
+    lv_bar_set_range(slider, 0, 2);   // 最大亮度等级设置
     lv_slider_set_value(slider, (get_backlight_brightenss() - '0'), LV_ANIM_ON);
     //lv_obj_add_event_cb(slider, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
     lv_obj_add_event_cb(slider, slider_event_cb, LV_EVENT_ALL, NULL);

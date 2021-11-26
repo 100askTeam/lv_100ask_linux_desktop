@@ -8,7 +8,7 @@ include $(LVGL_DIR)/lv_drivers/lv_drivers.mk
 include $(LVGL_DIR)/lv_lib_png/lv_lib_png.mk
 include $(LVGL_DIR)/lv_100ask_modules/lv_100ask_modules.mk
 
-BIN = imx6ull_SetTime
+BIN = stm32mp157_WLAN
 
 
 #Collect the files to compile

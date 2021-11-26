@@ -3,12 +3,12 @@
  * @file    set_lan.c
  * @author  百问科技
  * @version V1.0
- * @date    2021-11-03
+ * @date    2021-11-25
  * @brief	有线(LAN)网络设置
  ******************************************************************************
  * Change Logs:
  * Date           Author          Notes
- * 2021-11-03     zhouyuebiao     First version
+ * 2021-11-25     zhouyuebiao     First version
  ******************************************************************************
  * @attention
  *
@@ -137,7 +137,7 @@ static bool get_lan_info(void)
     memset(cmd_buff, 0, sizeof(cmd_buff));
     memset(result, 0, sizeof(result));
     //lv_snprintf(cmd_buff, sizeof(cmd_buff), "ifconfig %s | grep \"ether \" | awk '{print $2}'", Lan_info.device);
-    lv_snprintf(cmd_buff, sizeof(cmd_buff), "ifconfig %s | grep \"HWaddr \" | awk '{print $5}'", Lan_info.device); // ifconfig eth0 | grep "HWaddr " | awk '{print $5}'
+    lv_snprintf(cmd_buff, sizeof(cmd_buff), "ifconfig %s | grep \"ether \" | awk '{print $2}'", Lan_info.device); // ifconfig eth0 | grep "ether " | awk '{print $2}'
     shell_exec_handle(cmd_buff, result);
     lv_snprintf(Lan_info.mac, sizeof(Lan_info.mac), result);
 
@@ -145,7 +145,7 @@ static bool get_lan_info(void)
     memset(cmd_buff, 0, sizeof(cmd_buff));
     memset(result, 0, sizeof(result));
     //lv_snprintf(cmd_buff, sizeof(cmd_buff), "ifconfig %s | grep \"inet \" | awk '{print $2}'", Lan_info.device);
-    lv_snprintf(cmd_buff, sizeof(cmd_buff), "ifconfig %s | grep \"inet \" | awk -F '[:]'  '{print $2}' | awk  '{print $1}'", Lan_info.device);  // ifconfig eth0 | grep "inet " | awk -F '[:]'  '{print $2}' | awk  '{print $1}'
+    lv_snprintf(cmd_buff, sizeof(cmd_buff), "ifconfig %s | grep \"inet \" | awk '{print $2}'", Lan_info.device);  // ifconfig eth0 | grep "inet " | awk '{print $2}'
     shell_exec_handle(cmd_buff, result);
     lv_snprintf(Lan_info.ipaddr, sizeof(Lan_info.ipaddr), result);
     
@@ -160,7 +160,7 @@ static bool get_lan_info(void)
     memset(cmd_buff, 0, sizeof(cmd_buff));
     memset(result, 0, sizeof(result));
     //lv_snprintf(cmd_buff, sizeof(cmd_buff), "ifconfig %s | grep \"netmask \" | awk '{print $4}'", Lan_info.device);  
-    lv_snprintf(cmd_buff, sizeof(cmd_buff), "ifconfig %s | grep \"Mask\" | awk -F '[:]'  '{print $4}'", Lan_info.device);// ifconfig eth0 | grep "Mask" | awk -F '[:]'  '{print $4}'
+    lv_snprintf(cmd_buff, sizeof(cmd_buff), "ifconfig %s | grep \"netmask\" | awk '{print $4}'", Lan_info.device);// ifconfig eth0 | grep "netmask" | awk '{print $4}'
     shell_exec_handle(cmd_buff, result);
     lv_snprintf(Lan_info.netmask, sizeof(Lan_info.netmask), result);
 
@@ -202,7 +202,7 @@ static void set_cell_value(lv_obj_t * table)
     }
 }
 
-void imx6ull_set_lan_init(void)
+void set_lan_init(void)
 {
     lv_obj_t * obj_layout;
     static lv_style_t obj_layout_style;   // 容器的样式

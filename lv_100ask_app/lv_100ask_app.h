@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
 #include "src/general_app/general_app.h"
-#include "src/imx6ull_app/imx6ull_app.h"
+#include "src/stm32mp157_app/stm32mp157_app.h"
 //#include "stm32mp157_app/stm32mp157_app.h"
 
 /*********************

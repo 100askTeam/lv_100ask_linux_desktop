@@ -8,7 +8,7 @@ export CC := arm-buildroot-linux-gnueabihf-gcc
 export LVGL_DIR_NAME ?= lvgl
 export LVGL_DIR ?= ${shell pwd}
 export CFLAGS ?= -O3 -g0 -I$(LVGL_DIR)/  -Wall -Wshadow -Wundef -Wmissing-prototypes -Wno-discarded-qualifiers -Wall -Wextra -Wno-unused-function -Wno-error=strict-prototypes -Wpointer-arith -fno-strict-aliasing -Wno-error=cpp -Wuninitialized -Wmaybe-uninitialized -Wno-unused-parameter -Wno-missing-field-initializers -Wtype-limits -Wsizeof-pointer-memaccess -Wno-format-nonliteral -Wno-cast-qual -Wunreachable-code -Wno-switch-default -Wreturn-type -Wmultichar -Wformat-security -Wno-ignored-qualifiers -Wno-error=pedantic -Wno-sign-compare -Wno-error=missing-prototypes -Wdouble-promotion -Wclobbered -Wdeprecated -Wempty-body -Wtype-limits -Wshift-negative-value -Wstack-usage=2048 -Wno-unused-value -Wno-unused-parameter -Wno-missing-field-initializers -Wuninitialized -Wmaybe-uninitialized -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wtype-limits -Wsizeof-pointer-memaccess -Wno-format-nonliteral -Wpointer-arith -Wno-cast-qual -Wmissing-prototypes -Wunreachable-code -Wno-switch-default -Wreturn-type -Wmultichar -Wno-discarded-qualifiers -Wformat-security -Wno-ignored-qualifiers -Wno-sign-compare \
-	-I ~/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/include -I ~/100ask_imx6ull-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/dbus-1.0/include
+	-I /home/book/100ask_stm32mp157_pro-sdk/ToolChain/arm-buildroot-linux-gnueabihf_sdk-buildroot/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/dbus-1.0/include
 export LDFLAGS ?= -lm -ldbus-1 -lpthread
 BIN = 100ask_lvgl_Main
 
@@ -48,12 +48,11 @@ SRC_DIR  +=  lv_100ask_app/src/general_app/general_file_manager\
 			 lv_100ask_app/src/general_app/general_benchmark\
 			 lv_100ask_app/src/general_app/general_music_player\
 			 lv_100ask_app/src/general_app/general_about
-# imx6ull app
-SRC_DIR  +=  lv_100ask_app/src/imx6ull_app/imx6ull_set_lcd_brightness\
-			 lv_100ask_app/src/imx6ull_app/imx6ull_set_time\
-			 lv_100ask_app/src/imx6ull_app/imx6ull_set_wlan\
-			 lv_100ask_app/src/imx6ull_app/imx6ull_set_lan
-
+# stm32mp157 app
+SRC_DIR  +=  lv_100ask_app/src/stm32mp157_app/stm32mp157_set_lcd_brightness\
+			 lv_100ask_app/src/stm32mp157_app/stm32mp157_set_time\
+			 lv_100ask_app/src/stm32mp157_app/stm32mp157_set_wlan\
+			 lv_100ask_app/src/stm32mp157_app/stm32mp157_set_lan
 
 all: default
 	$(foreach  dir,$(SRC_DIR),make $(RUN_JOBS) -C $(dir);)

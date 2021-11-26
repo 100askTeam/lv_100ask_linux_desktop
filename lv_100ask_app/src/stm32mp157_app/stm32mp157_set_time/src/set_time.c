@@ -3,12 +3,12 @@
  * @file    set_time.c
  * @author  百问科技
  * @version V1.0
- * @date    2021-10-29
- * @brief	IMX6ULL屏幕背光设置
+ * @date    2021-11-25
+ * @brief	时间设置
  ******************************************************************************
  * Change Logs:
  * Date           Author          Notes
- * 2021-10-29     zhouyuebiao     First version
+ * 2021-11-25     zhouyuebiao     First version
  ******************************************************************************
  * @attention
  *
@@ -475,7 +475,7 @@ static lv_obj_t * layout_init(void)
 }
 
 
-void imx6ull_set_time_init(void)
+void set_time_init(void)
 {
     lv_obj_t * layout_obj = layout_init();
     clock_init(layout_obj);

@@ -60,7 +60,7 @@ int main(void)
     dbus_method_call("net.ask100.lvgl.Main", "/net/ask100/lvgl/Main", "net.ask100.lvgl.Main", "states", 0, 0);
 
     /*Create a Demo*/
-    imx6ull_set_time_init();
+    set_time_init();
 
     // 悬浮球控制初始化
     assistive_touch_init();

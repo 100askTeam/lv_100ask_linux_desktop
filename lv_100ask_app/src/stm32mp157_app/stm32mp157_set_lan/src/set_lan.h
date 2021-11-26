@@ -1,5 +1,5 @@
-#ifndef IMX6ULL_SET_WLAN_H
-#define IMX6ULL_SET_WLAN_H
+#ifndef SET_LAN_H
+#define SET_LAN_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,7 +9,7 @@ extern "C" {
 /*********************
  *      INCLUDES
  *********************/
-#include "../../imx6ull_app.h"
+#include "../../stm32mp157_app.h"
 
 
 /*********************
@@ -23,7 +23,7 @@ extern "C" {
 /**********************
  * GLOBAL PROTOTYPES
  **********************/
-void imx6ull_set_wlan_init(void);
+void set_lan_init(void);
 
 
 
@@ -35,7 +35,7 @@ void imx6ull_set_wlan_init(void);
 } /* extern "C" */
 #endif
 
-#endif /* IMX6ULL_SET_WLAN_H */
+#endif /* SET_LAN_H */
 
 
 
